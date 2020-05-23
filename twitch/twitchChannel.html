@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>POE Multitask v0.1</title>
+    <link rel = "stylesheet" href = "twitch.css">
+    <script>
+      require('electron-titlebar');
+      function setChannel(video){
+        var val = document.getElementById("channelInput").value;
+        localStorage.setItem( 'channel', val );
+        localStorage.setItem( 'video', video );
+        window.location.href = "./twitch.html"
+      }
+    </script>
+  </head>
+  <body>
+    <div id="electron-titlebar" class="drag"></div>
+    <div style = "position: absolute; left:30%; top:40%; text-align:center;">
+      <h2>Please Enter Twitch Channel Name (Has to be exactly the same)</h2>
+      <input id = "channelInput"></input>
+      <button style = "border-radius:2px;" onclick = "setChannel('video-with-chat')">Stream with chat</button>
+      <button style = "border-radius:2px;" onclick = "setChannel('video')">Stream without chat</button>
+    </div>
+  </body>
+  <footer>
+    &nbsp;
+    <button>Prices</button>
+    <button>Farming Tool</button>
+    <a href = "./twitchChannel.html"><button>Twitch Streams</button></a>
+  </footer>
+</html>

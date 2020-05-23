@@ -1,0 +1,47 @@
+@import "https://fonts.googleapis.com/css?family=Lato:100";
+
+body {
+  margin:0;
+  padding:0;
+  background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+  background-size: 400% 400%;
+  position: relative;
+  animation: move 60s linear infinite;
+  color: white;
+  font-family: "Lato", Arial, sans-serif;
+}
+
+h1{
+  font-size: 40px;
+}
+
+.center {
+  text-align: center;
+  padding: 10px;
+}
+
+@keyframes move {
+  0%{
+    background-position: 0 50%;
+  }
+  50%{
+    background-position: 100% 50%;
+  }
+  100%{
+    background-position: 0 50%;
+  }
+}
+
+footer{
+  position: fixed;
+  bottom: 0;
+}
+
+button{
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  box-shadow:inset 0px 1px 0px 0px #ffffff;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+}

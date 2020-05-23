@@ -1,0 +1,113 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>POE Multitask v0.1</title>
+    <link rel = "stylesheet" href = "price.css">
+    <script>
+      require('electron-titlebar');
+    </script>
+    </script>
+  </head>
+  <body>
+    <div id="electron-titlebar" class="drag"></div>
+    <br>
+    <br>
+    <div style = "height:90%; overflow-y:auto;">
+      &nbsp;
+      <input id = "search" placeholder = "Search for items here"></input>
+      <button id = "searchButton">Search</button>
+      <table id = "table" style="width:100%">
+        <tr id = "title">
+          <th>Item</th>
+          <th>Price (Chaos/Exalted)</th>
+          <th>League</th>
+        </tr>
+      </table>
+    </div>
+  </body>
+  <footer>
+    &nbsp;
+    <button id = "Accessories">Accessories</button>
+    <button id = "Armor">Armor</button>
+    <button id = "Bases">Bases</button>
+    <button id = "Beasts">Beasts</button>
+    <button id = "Currency">Currency</button>
+    <button id = "Divination Cards">Divination Cards</button>
+    <button id = "Helmet Enchants">Helmet Enchants</button>
+    <button id = "Flasks">Flasks</button>
+    <button id = "Skill Gems">Skill Gems</button>
+    <button id = "Jewels">Jewels</button>
+    <button id = "Prophecies">Prophecies</button>
+    <button id = "Maps">Maps</button>
+    <button id = "Weapons">Weapons</button>
+    <br>
+    &nbsp;
+    <button>Prices</button>
+    <a href = "../farming/farming.html"><button>Farming Tool</button></a>
+    <a href = "../twitch/twitchChannel.html"><button>Twitch Streams</button></a>
+  </footer>
+  <script>
+  var selectedCategory = "Currency";
+  async function fillLeagues(){
+    const response = await fetch('https://api.poe.watch/leagues');
+    const json = await response.json();
+    var appendTarget = document.getElementById("searchButton");
+    var num = 0;
+    var x = 0;
+    while (num < json.length){
+      const temp = json[num];
+      if(temp.active == true){
+        appendFunc(createElementFromHTML('<input type="checkbox" onclick = "toggle(this.id)"id="league' + x +'">'), appendTarget);
+        appendTarget = document.getElementById('league' + x);
+        appendFunc(createElementFromHTML('<label id = "label' +x+'" for="league' + x + '">' + temp.name + '</label>'), appendTarget);
+        appendTarget = document.getElementById('label' + x);
+        x++;
+      }
+      num++;
+    }
+  }
+  function createElementFromHTML(htmlString) {
+    var div = document.createElement('div');
+    div.innerHTML = htmlString;
+    return div.firstChild;
+  }
+  function appendFunc(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+  }
+  function toggle(id){
+    let iter = 0;
+    while(true){
+      try{
+        document.getElementById('league'+iter).checked = false;
+        iter++;
+      }catch(e){
+        document.getElementById(id).checked = true;
+        break;
+      }
+    }
+    fill(document.getElementById("label" + id.slice(-1)).textContent);
+  }
+  function fill(league){
+    const response = await fetch('https://api.poe.watch/get?league='+ league +'&category=' + selectedCategory);
+    const json = await response.json();
+    var appendTarget = document.getElementById("searchButton");
+    var num = 0;
+    var x = 0;
+    while (num < json.length){
+      const temp = json[num];
+      if(temp.active == true){
+        appendFunc(createElementFromHTML('<input type="checkbox" onclick = "toggle(this.id)"id="league' + x +'">'), appendTarget);
+        appendTarget = document.getElementById('league' + x);
+        appendFunc(createElementFromHTML('<label id = "label' +x+'" for="league' + x + '">' + temp.name + '</label>'), appendTarget);
+        appendTarget = document.getElementById('label' + x);
+        x++;
+      }
+      num++;
+    }
+  }
+  function buttonToggle(id){
+
+  }
+  fillLeagues();
+  </script>
+</html>

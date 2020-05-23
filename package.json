@@ -1,0 +1,27 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "\"Tool for Path of Exile\"",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanliu285/POE-Tool.git"
+  },
+  "author": "Ryan Liu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanliu285/POE-Tool/issues"
+  },
+  "homepage": "https://github.com/ryanliu285/POE-Tool#readme",
+  "devDependencies": {
+    "electron": "^8.2.5"
+  },
+  "dependencies": {
+    "custom-electron-titlebar": "^3.2.2-hotfix62",
+    "electron-tabs": "^0.15.0",
+    "electron-titlebar": "0.0.3"
+  }
+}

@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>POE Multitask v0.1</title>
+    <link rel = "stylesheet" href = "twitch.css">
+    <script>
+      require('electron-titlebar');
+    </script>
+  </head>
+  <body>
+    <div id="electron-titlebar" class="drag"></div>
+    <div id="twitch-embed"></div>
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+    <script type="text/javascript">
+      var data = localStorage['channel'];
+      localStorage.removeItem( 'channel' );
+      var vid = localStorage['video'];
+      localStorage.removeItem( 'video' );
+      new Twitch.Embed("twitch-embed", {
+        width: "100%",
+        height: "95%",
+        layout: vid,
+        channel: data,
+      });
+    </script>
+  </body>
+  <footer>
+    &nbsp;
+    <button>Prices</button>
+    <button>Farming Tool</button>
+    <a href = "./twitchChannel.html"><button>Twitch Streams</button></a>
+  </footer>
+</html>
