@@ -49,10 +49,10 @@ function createWindow () {
   // Create the browser window.
   let win = new BrowserWindow({
     frame: false,
-    height: height/4,
-    width: width/4,
-    x: width*3/4,
-    y: height*3/4,
+    height: height/3,
+    width: width/3,
+    x: width - width/3,
+    y: height - height/3,
     webPreferences: {
       nodeIntegration: true
     }
