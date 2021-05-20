@@ -34,39 +34,43 @@
     <a href = "../twitch/twitchChannel.html"><button>Twitch Streams</button></a>
   </footer>
   <script>
-  var selectedCategory = "Currency";
-  var currentLeague = "Standard";
   async function fillLeagues(){
     const response = await fetch('https://api.poe.watch/leagues');
     const json = await response.json();
     var appendTarget = document.getElementById("refreshButton");
     var num = 0;
-    var x = 0;
+    var menu = createElementFromHTML('<select id="leagueMenu" style = "margin-left: 5px;">');
+    appendFunc(menu, appendTarget);
     while (num < json.length){
-      const temp = json[num];
-      if(temp.active == true){
-        appendFunc(createElementFromHTML('<input type="checkbox" onclick = "toggle(this.id)"id="league' + x +'">'), appendTarget);
-        appendTarget = document.getElementById('league' + x);
-        appendFunc(createElementFromHTML('<label id = "label' +x+'" for="league' + x + '">' + temp.name + '</label>'), appendTarget);
-        appendTarget = document.getElementById('label' + x);
-        x++;
-      }
+      const temp = json[num]; //current League
+      var x = document.createElement("OPTION");
+      x.text = temp.name;
+      x.value = temp.name;
+      menu.add(x);
+      //appendFunc(createElementFromHTML('<input type="checkbox" onclick = "toggle(this.id)"id="league' + num +'">'), appendTarget);
+      //appendTarget = document.getElementById('league' + num);
+      //appendFunc(createElementFromHTML('<label id = "label' +num+'" for="league' + num + '">' + temp.name + '</label>'), appendTarget);
+      //appendTarget = document.getElementById('label' + num);
       num++;
     }
-    toggle('league' + (x-1));
-    fillButtons();
+    fillCategories();
   }
-  async function fillButtons(){
+  async function fillCategories(){
     const response = await fetch('https://api.poe.watch/categories');
     const json = await response.json();
-    var appendTarget = document.getElementById("buttons");
+    var appendTarget = document.getElementById("leagueMenu");
     var num = 0;
+    var menu = createElementFromHTML('<select id="categoryMenu" style = "margin-left: 5px;">');
+    appendFunc(menu, appendTarget);
     while (num < json.length){
       const temp = json[num];
-      appendFunc(createElementFromHTML('<button id = "'+temp['name']+'" onclick = "buttonToggle(this.id)">'+temp['display']+'</button>'), appendTarget);
-      appendTarget = document.getElementById(temp['name']);
+      var x = document.createElement("OPTION");
+      x.text = temp.display;
+      x.value = temp.name;
+      menu.add(x);
       num++;
     }
+    fill()
   }
   function createElementFromHTML(htmlString) {
     var div = document.createElement('div');
@@ -76,22 +80,8 @@
   function appendFunc(newNode, existingNode) {
     existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
   }
-  function toggle(id){
-    let iter = 0;
-    while(true){
-      try{
-        document.getElementById('league'+iter).checked = false;
-        iter++;
-      }catch(e){
-        document.getElementById(id).checked = true;
-        break;
-      }
-    }
-    currentLeague = document.getElementById("label" + id.slice(-1)).textContent;
-    fill();
-  }
   async function fill(search = ''){
-    const response = await fetch('https://api.poe.watch/get?league='+ currentLeague +'&category=' + selectedCategory);
+    const response = await fetch('https://api.poe.watch/get?category='+ document.getElementById("categoryMenu").value +'&league=' + document.getElementById("leagueMenu").value);
     const json = await response.json();
     var table = document.getElementById("table");
     var num = 0;
@@ -109,11 +99,6 @@
       row.style = "background-color:rgba(255, 255, 255, 0.2);"
       num++;
     }
-  }
-  function buttonToggle(id){
-    console.log("asdf")
-    selectedCategory = id;
-    fill();
   }
   fillLeagues();
   </script>
