@@ -1,11 +1,58 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, session, screen} = require('electron')
 
 function createWindow () {
+  //Taken from https://github.com/BarryCarlyon/twitch_misc/blob/master/player/electron/app.js
+  session.defaultSession.webRequest.onBeforeRequest({
+    urls: [
+      'https://embed.twitch.tv/*channel=*'
+    ]
+  }, (details, cb) => {
+    var redirectURL = details.url;
+
+    var params = new URLSearchParams(redirectURL.replace('https://embed.twitch.tv/',''));
+    if (params.get('parent') != '') {
+      cb({});
+      return;
+    }
+    params.set('parent', 'locahost');
+    params.set('referrer', 'https://localhost/');
+
+    var redirectURL = 'https://embed.twitch.tv/?' + params.toString();
+    console.log('Adjust to', redirectURL);
+
+    cb({
+      cancel: false,
+      redirectURL
+    });
+  });
+
+  // works for dumb iFrames
+  session.defaultSession.webRequest.onHeadersReceived({
+    urls: [
+      'https://player.twitch.tv/*',
+      'https://embed.twitch.tv/*'
+    ]
+  }, (details, cb) => {
+    var responseHeaders = details.responseHeaders;
+
+    console.log('headers', details.url, responseHeaders);
+
+    delete responseHeaders['Content-Security-Policy'];
+    //console.log(responseHeaders);
+
+    cb({
+      cancel: false,
+      responseHeaders
+    });
+  });
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
   // Create the browser window.
   let win = new BrowserWindow({
     frame: false,
-    height: 1000,
-    width: 1600,
+    height: height/4,
+    width: width/4,
+    x: width*3/4,
+    y: height*3/4,
     webPreferences: {
       nodeIntegration: true
     }
@@ -15,7 +62,7 @@ function createWindow () {
 
   win.loadFile('index.html')
 
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 
   win.setAlwaysOnTop(true, 'screen')
 

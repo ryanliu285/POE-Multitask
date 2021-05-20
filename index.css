@@ -3,7 +3,7 @@
 body {
   margin:0;
   padding:0;
-  background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+  background: #282828;/*linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);*/
   background-size: 400% 400%;
   position: relative;
   animation: move 60s linear infinite;

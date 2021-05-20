@@ -23,5 +23,6 @@
     "custom-electron-titlebar": "^3.2.2-hotfix62",
     "electron-tabs": "^0.15.0",
     "electron-titlebar": "0.0.3"
-  }
+  },
+  "keywords": []
 }
