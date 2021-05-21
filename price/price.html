@@ -40,7 +40,7 @@
     const json = await response.json();
     var appendTarget = document.getElementById("refreshButton");
     var num = 0;
-    var menu = createElementFromHTML('<select id="leagueMenu" style = "margin-left: 5px;">');
+    var menu = createElementFromHTML('<select id="leagueMenu" onchange = "fill(search = document.getElementById(\'search\').value)" style = "margin-left: 5px;">');
     appendFunc(menu, appendTarget);
     while (num < json.length){
       const temp = json[num]; //current League
@@ -61,7 +61,7 @@
     const json = await response.json();
     var appendTarget = document.getElementById("leagueMenu");
     var num = 0;
-    var menu = createElementFromHTML('<select id="categoryMenu" style = "margin-left: 5px;">');
+    var menu = createElementFromHTML('<select id="categoryMenu" onchange = "fill(search = document.getElementById(\'search\').value)" style = "margin-left: 5px;">');
     appendFunc(menu, appendTarget);
     while (num < json.length){
       const temp = json[num];
