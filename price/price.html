@@ -15,7 +15,7 @@
     <div style = "height:90%; overflow-y:auto;">
       &nbsp;
       <input id = "search" placeholder = "Search for items here"></input>
-      <button id = "searchButton" onclick = "clearTable()">Search</button>
+      <button id = "searchButton" onclick = "fill(search = document.getElementById('search').value)">Search</button>
       <button id = "refreshButton" onclick = "fill(search = document.getElementById('search').value)">Refresh</button>
       <table id = "table" style="width:100%; font-weight:bold; text-align: left;">
         <tr id = "title">
@@ -23,6 +23,7 @@
           <th>Exalted</th>
           <th>Chaos</th>
           <th>Change</th>
+          <th>Confidence Level</th>
         </tr>
       </table>
     </div>
@@ -92,9 +93,9 @@
     const json = await response.json();
     var table = document.getElementById("table");
     clearTable();
-    console.log("finish")
     //Array.prototype.slice.call(table.rows, 1).forEach(x => table.deleteRow(x))
     var num = 0;
+    var rows = 1;
     if (sortType == 'descending') {
       json.sort(function(a, b){
         return b[sort] - a[sort];
@@ -105,12 +106,13 @@
       });
     }
     while (num < json.length){
+      console.log("Rows: " + rows)
       const temp = json[num];
       if (search != '' && temp.name.toLowerCase().trim().includes(search.toLowerCase().trim()) == false) {
         num++;
         continue;
       }
-      var row = table.insertRow(num+1);
+      var row = table.insertRow(rows);
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
       var cell3 = row.insertCell(2);
@@ -120,6 +122,7 @@
       cell3.innerHTML = temp["mean"].toFixed(2);
       cell4.innerHTML = temp["change"]+"%";
       row.style = "background-color:rgba(255, 255, 255, 0.2);"
+      rows++;
       num++;
     }
   }
