@@ -37,6 +37,10 @@ footer{
   bottom: 0;
 }
 
+#title {
+  cursor: pointer;
+}
+
 button{
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
