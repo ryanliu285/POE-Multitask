@@ -17,12 +17,14 @@
   },
   "homepage": "https://github.com/ryanliu285/POE-Tool#readme",
   "devDependencies": {
-    "electron": "^8.2.5"
+    "electron": "^12.0.9"
   },
   "dependencies": {
     "custom-electron-titlebar": "^3.2.2-hotfix62",
     "electron-tabs": "^0.15.0",
-    "electron-titlebar": "0.0.3"
+    "electron-titlebar": "0.0.3",
+    "node-fetch": "^2.6.1",
+    "node-html-parser": "^3.3.3"
   },
   "keywords": []
 }
