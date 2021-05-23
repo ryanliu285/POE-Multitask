@@ -6,7 +6,6 @@
     <script>
       require('electron-titlebar');
     </script>
-    </script>
   </head>
   <body>
     <div id="electron-titlebar" class="drag" style = "color:white;"></div>
@@ -19,11 +18,11 @@
       <button id = "refreshButton" onclick = "fill()">Refresh</button>
       <table id = "table" style="width:100%; font-weight:bold; text-align: left;">
         <tr id = "title">
-          <th id = "Item" onclick = "change('Item')">Item</th>
+          <th id = "Item" >Item</th> <!--onclick = "change('Item')"-->
           <th id = "Exalted" onclick = "change('Exalted')">Exalted ▼</th>
           <th id = "Chaos" onclick = "change('Chaos')">Chaos ▼</th>
           <th id = "Change" onclick = "change('Change')">Change</th>
-          <th id = "Confidence Level" onclick = "change('Confidence Level')">Confidence Level</th>
+          <th id = "Confidence Level">Confidence Level</th> <!-- onclick = "change('Confidence Level')"-->
         </tr>
       </table>
     </div>
@@ -156,12 +155,12 @@
     if (id.toLowerCase() == sortedBy) {
         elem.innerHTML = id + " ▲";
         sortedType = 'ascending';
-        fill(document.getElementById('search').value, id.toLowerCase, 'ascending');
+        fill(document.getElementById('search').value, id.toLowerCase(), 'ascending');
         return;
     }
     elem.innerHTML = id + " ▼";
     sortedType = 'descending';
-    fill(document.getElementById('search').value, id.toLowerCase, 'descending');
+    fill(document.getElementById('search').value, id.toLowerCase(), 'descending');
   }
   function toggle() {
     excludeLow = !excludeLow;
