@@ -5,14 +5,15 @@
     <link rel = "stylesheet" href = "../price/price.css">
     <script>
       require('electron-titlebar');
-      async function getDivPage() {
-        require('node-fetch');
-        const url = 'https://poedb.tw/us/DivinationCard';
-        const response = await fetch(url).then(res => res.text())
-          .then(body => console.log(body));
+      var divPage = null;
+      var mapPage = null;
+      async function getPages() {
+        const response = await fetch(https://poedb.tw/us/DivinationCard).then(res => res.text())
+          .then(body => divPage = body);
+        const response = await fetch(https://poedb.tw/us/Atlas).then(res => res.text())
+          .then(body => mapPage = body);
       }
-      getDivPage();
-      
+      getPages();
     </script>
   </head>
   <body>
