@@ -8,10 +8,14 @@
       var divPage = null;
       var mapPage = null;
       async function getPages() {
-        const response = await fetch(https://poedb.tw/us/DivinationCard).then(res => res.text())
+        var response = await fetch('https://poedb.tw/us/DivinationCard').then(res => res.text())
           .then(body => divPage = body);
-        const response = await fetch(https://poedb.tw/us/Atlas).then(res => res.text())
+        response = await fetch('https://poedb.tw/us/Atlas').then(res => res.text())
           .then(body => mapPage = body);
+        extractInfo();
+      }
+      function extractInfo() {
+
       }
       getPages();
     </script>
