@@ -2,13 +2,17 @@
   <head>
     <meta charset="UTF-8">
     <title>POE Multitask v0.1</title>
-    <link rel = "stylesheet" href = "price.css">
+    <link rel = "stylesheet" href = "../price/price.css">
     <script>
       require('electron-titlebar');
-      const rp = require('node-fetch');
-      const url = 'https://poedb.tw/us/DivinationCard';
-      fetch(url)
-        .then(res => res.text())
+      async function getDivPage() {
+        require('node-fetch');
+        const url = 'https://poedb.tw/us/DivinationCard';
+        const response = await fetch(url).then(res => res.text())
+          .then(body => console.log(body));
+      }
+      getDivPage();
+      
     </script>
   </head>
   <body>
