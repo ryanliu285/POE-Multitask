@@ -5,17 +5,57 @@
     <link rel = "stylesheet" href = "../price/price.css">
     <script>
       require('electron-titlebar');
+      var HTMLParser = require('node-html-parser');
+      class AtlasMap{
+        constructor(name, card) {
+          this.name = name;
+          this.divs = [];
+          this.divs.push(card);
+        }
+        add(div) {
+          this.divs.push(div);
+        }
+        getDivs(){
+          return this.divs;
+        }
+        getName(){
+          return this.name;
+        }
+      }
+
       var divPage = null;
-      var mapPage = null;
+      var maps = new Map();
       async function getPages() {
         var response = await fetch('https://poedb.tw/us/DivinationCard').then(res => res.text())
           .then(body => divPage = body);
-        response = await fetch('https://poedb.tw/us/Atlas').then(res => res.text())
-          .then(body => mapPage = body);
         extractInfo();
       }
       function extractInfo() {
-
+        const root = HTMLParser.parse(divPage);
+        const divCards = root.querySelectorAll('.divination');
+        for (var i = 0; i < divCards.length; i++) {
+          const card = divCards[i];
+          const cardPage = "https://poedb.tw" + card.outerHTML.substring(card.outerHTML.indexOf('href')+6, card.outerHTML.indexOf('\'>'));
+          //console.log(cardPage);
+          parseCard(cardPage, card.text);
+        }
+      }
+      async function parseCard(page, card) {
+        var result = null;
+        var response = await fetch(page).then(res => res.text())
+          .then(body => result = body);
+        const links = HTMLParser.parse(result).querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+          if (links[i] != null && links[i].text.includes("Map") && links[i].text.indexOf("Map") + 3 == links[i].text.length) {
+            var mapText = links[i].text;
+            if (maps.has(mapText)) {
+              var mapObj = maps.get(mapText);
+              mapObj.add(card);
+            } else {
+              maps.set(mapText, new AtlasMap(mapText, card));
+            }
+          }
+        }
       }
       getPages();
     </script>
