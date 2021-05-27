@@ -72,10 +72,11 @@
       <table id = "table" style="width:100%; font-weight:bold; text-align: left;">
         <tr id = "title">
           <th id = "Item" >Item</th> <!--onclick = "change('Item')"-->
-          <th id = "Exalted" onclick = "change('Exalted')">Exalted ▼</th>
-          <th id = "Chaos" onclick = "change('Chaos')">Chaos ▼</th>
-          <th id = "Change" onclick = "change('Change')">Change</th>
-          <th id = "Confidence Level">Confidence Level</th> <!-- onclick = "change('Confidence Level')"-->
+          <th id = "mapEx" onclick = "change('mapEx')">Map Price(Ex)</th>
+          <th id = "mapC" onclick = "change('mapC')">Map Price(C)</th>
+          <th id = "cardEx" onclick = "change('cardEx')">Total div price(Ex) ▼</th>
+          <th id = "cardC" onclick = "change('cardC')">Total div price(C) ▼</th>
+          <th id = "Drops">Divination Card Drops</th> <!-- onclick = "change('Confidence Level')"-->
         </tr>
       </table>
     </div>
@@ -87,7 +88,7 @@
     <a href = "../twitch/twitchChannel.html"><button>Twitch Streams</button></a>
   </footer>
   <script>
-  var sortedBy = "chaos";
+  var sortedBy = "cardc";
   var sortedType = "descending";
   var excludeLow = false;
   async function fillLeagues(){
@@ -109,27 +110,7 @@
       //appendTarget = document.getElementById('label' + num);
       num++;
     }
-    fillCategories();
-  }
-  async function fillCategories(){
-    const response = await fetch('https://api.poe.watch/categories');
-    const json = await response.json();
-    var appendTarget = document.getElementById("leagueMenu");
-    var num = 0;
-    var menu = createElementFromHTML('<select id="categoryMenu" onchange = "fill(search = document.getElementById(\'search\').value)" style = "margin-left: 5px;">');
-    appendFunc(menu, appendTarget);
-    var newEl = createElementFromHTML('<input type="checkbox" onclick = "toggle()">');
-    appendFunc(newEl, menu);
-    appendFunc(createElementFromHTML('<label>Exclude Low Confidence</label>'), newEl);
-    while (num < json.length){
-      const temp = json[num];
-      var x = document.createElement("OPTION");
-      x.text = temp.display;
-      x.value = temp.name;
-      menu.add(x);
-      num++;
-    }
-    fill()
+    fill();
   }
   function createElementFromHTML(htmlString) {
     var div = document.createElement('div');
@@ -148,10 +129,10 @@
   }
   async function fill(search = document.getElementById('search').value, sort = sortedBy, sortType = sortedType){
     sortedBy = sort;
-    if (sort == 'chaos') {
+    if (sort == 'mapc' || sort == 'mapex') {
       sort = 'mean';
     }
-    const response = await fetch('https://api.poe.watch/get?category='+ document.getElementById("categoryMenu").value +'&league=' + document.getElementById("leagueMenu").value);
+    const response = await fetch('https://api.poe.watch/get?category='+'map&league=' + document.getElementById("leagueMenu").value);
     const json = await response.json();
     var table = document.getElementById("table");
     clearTable();
@@ -200,12 +181,12 @@
   }
   function change(id) {
     var elem = document.getElementById(id);
-    document.getElementById("Exalted").innerHTML = "Exalted";
-    document.getElementById("Item").innerHTML = "Item";
-    document.getElementById("Chaos").innerHTML = "Chaos";
-    document.getElementById("Confidence Level").innerHTML = "Confidence Level";
-    document.getElementById("Change").innerHTML = "Change";
+    document.getElementById("mapEx").innerHTML = "Map Price(Ex)";
+    document.getElementById("mapC").innerHTML = "Map Price(C)";
+    document.getElementById("divEx").innerHTML = "Total div price(Ex)";
+    document.getElementById("divC").innerHTML = "Total div price(C)";
     if (id.toLowerCase() == sortedBy) {
+        if (elem.innerHTML == "")
         elem.innerHTML = id + " ▲";
         sortedType = 'ascending';
         fill(document.getElementById('search').value, id.toLowerCase(), 'ascending');
