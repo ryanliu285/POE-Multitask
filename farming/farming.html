@@ -21,10 +21,18 @@
         getName(){
           return this.name;
         }
+        getTotal() {
+          var sum = 0;
+          for (var i = 0; i < this.divs.length; i++) {
+            sum += divPrices.get(this.divs[i]);
+          }
+          return sum;
+        }
       }
 
       var divPage = null;
       var maps = new Map();
+      var divPrices = new Map();
       async function getPages() {
         var response = await fetch('https://poedb.tw/us/DivinationCard').then(res => res.text())
           .then(body => divPage = body);
@@ -39,7 +47,7 @@
           //console.log(cardPage);
           parseCard(cardPage, card.text);
         }
-        setTimeout(() => {fillLeagues();}, 10000);        
+        setTimeout(() => {fillLeagues();}, 10000);
       }
       async function parseCard(page, card) {
         var result = null;
@@ -68,8 +76,8 @@
     <div style = "height:90%; overflow-y:auto;">
       &nbsp;
       <input id = "search" placeholder = "Search for items here"></input>
-      <button id = "searchButton" onclick = "fill()">Search</button>
-      <button id = "refreshButton" onclick = "fill()">Refresh</button>
+      <button id = "searchButton" onclick = "fillDivPrices()">Search</button>
+      <button id = "refreshButton" onclick = "fillDivPrices()">Refresh</button>
       <table id = "table" style="width:100%; font-weight:bold; text-align: left;">
         <tr id = "title">
           <th id = "Item" >Item</th> <!--onclick = "change('Item')"-->
@@ -97,7 +105,7 @@
     const json = await response.json();
     var appendTarget = document.getElementById("refreshButton");
     var num = 0;
-    var menu = createElementFromHTML('<select id="leagueMenu" onchange = "fill(search = document.getElementById(\'search\').value)" style = "margin-left: 5px;">');
+    var menu = createElementFromHTML('<select id="leagueMenu" onchange = "fillDivPrices()" style = "margin-left: 5px;">');
     appendFunc(menu, appendTarget);
     while (num < json.length){
       const temp = json[num]; //current League
@@ -111,7 +119,7 @@
       //appendTarget = document.getElementById('label' + num);
       num++;
     }
-    fill();
+    fillDivPrices();
   }
   function createElementFromHTML(htmlString) {
     var div = document.createElement('div');
@@ -130,9 +138,6 @@
   }
   async function fill(search = document.getElementById('search').value, sort = sortedBy, sortType = sortedType){
     sortedBy = sort;
-    if (sort == 'mapc' || sort == 'mapex') {
-      sort = 'mean';
-    }
     const response = await fetch('https://api.poe.watch/get?category='+'map&league=' + document.getElementById("leagueMenu").value);
     const json = await response.json();
     var table = document.getElementById("table");
@@ -140,15 +145,20 @@
     //Array.prototype.slice.call(table.rows, 1).forEach(x => table.deleteRow(x))
     var num = 0;
     var rows = 1;
-    if (sortType == 'descending') {
-      json.sort(function(a, b){
-        return b[sort] - a[sort];
-      });
-    } else {
-      json.sort(function(a, b){
-        return a[sort] - b[sort];
-      });
+
+    if (sort == 'mapc' || sort == 'mapex') {
+      sort = 'mean';
+      if (sortType == 'descending') {
+        json.sort(function(a, b){
+          return b[sort] - a[sort];
+        });
+      } else {
+        json.sort(function(a, b){
+          return a[sort] - b[sort];
+        });
+      }
     }
+
     while (num < json.length){
       //console.log("Rows: " + rows)
       const temp = json[num];
@@ -184,6 +194,27 @@
       rows++;
       num++;
     }
+
+    if (sort == 'divc' || sort == 'divex') {
+      sort = 'mean';
+      if (sortType == 'descending') {
+        json.sort(function(a, b){
+          return b[sort] - a[sort];
+        });
+      } else {
+        json.sort(function(a, b){
+          return a[sort] - b[sort];
+        });
+      }
+    }
+  }
+  async function fillDivPrices() {
+    const divRes = await fetch('https://api.poe.watch/get?category='+'card&league=' + document.getElementById("leagueMenu").value);
+    const divInfo = await divRes.json();
+    for (var i = 0; i < divInfo.length; i++) {
+      divPrices.set(divInfo[i].name, divInfo[i].mean);
+    }
+    fill();
   }
   function change(id) {
     var elem = document.getElementById(id);
