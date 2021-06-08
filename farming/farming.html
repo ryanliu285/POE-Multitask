@@ -100,6 +100,7 @@
   var sortedBy = "cardc";
   var sortedType = "descending";
   var excludeLow = false;
+  var exRatio = 1;
   async function fillLeagues(){
     const response = await fetch('https://api.poe.watch/leagues');
     const json = await response.json();
@@ -188,6 +189,8 @@
           console.log(temp["name"]+ ": " + mapDivs);
         }
         divCol.innerHTML = divCol.innerHTML.substring(0, divCol.innerHTML.length - 3);
+        divCCol.innerHTML = maps.get(temp["name"]).getTotal().toFixed(2);
+        divExCol.innerHTML = (maps.get(temp["name"]).getTotal() / exRatio).toFixed(2);
       }
 
       row.style = "background-color:rgba(255, 255, 255, 0.2);"
@@ -213,6 +216,14 @@
     const divInfo = await divRes.json();
     for (var i = 0; i < divInfo.length; i++) {
       divPrices.set(divInfo[i].name, divInfo[i].mean);
+    }
+    const result = await fetch('https://api.poe.watch/get?category='+'currency&league=' + document.getElementById("leagueMenu").value);
+    const curr = await result.json();
+    for (var i = 0; i < divInfo.length; i++) {
+      if (curr[i].name == "Exalted Orb") {
+        exRatio = curr[i].mean;
+        break;
+      }
     }
     fill();
   }
