@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/ryanliu285/POE-Tool#readme",
   "devDependencies": {
-    "electron": "^12.0.9"
+    "electron": "^18.3.7"
   },
   "dependencies": {
     "custom-electron-titlebar": "^3.2.2-hotfix62",
